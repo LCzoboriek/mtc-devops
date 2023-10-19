@@ -6,3 +6,12 @@ resource "aws_vpc" "ldc_vpc" {
     Name = "ldc_vpc"
   }
 }
+
+resource "aws_internet_gateway" "ldc_gw" {
+  vpc_id = aws_vpc.ldc_vpc.id
+
+  tags = {
+    Name = "ldc_igw"
+  }
+
+}
