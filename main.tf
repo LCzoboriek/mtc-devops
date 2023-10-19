@@ -23,3 +23,17 @@ resource "aws_internet_gateway" "ldc_gw" {
   }
 
 }
+
+resource "aws_route_table" "ldc_public_rt" {
+   vpc_id = aws_vpc.ldc_vpc.id
+   tags = {
+    Name = "ldc-public"
+   }
+}
+
+resource "aws_route" "default_route" {
+  route_table_id = aws_route_table.ldc_public_rt.id
+  destination_cidr_block = "0.0.0.0/0"
+  gateway_id = aws_internet_gateway.ldc_gw.id
+
+}
