@@ -37,3 +37,11 @@ resource "aws_route" "default_route" {
   gateway_id = aws_internet_gateway.ldc_gw.id
 
 }
+
+resource "aws_default_route_table" "ldc_private_route" {
+  default_route_table_id = aws_vpc.ldc_vpc.default_route_table_id
+
+  tags = {
+    Name = "ldc_private_route"
+  }
+}
