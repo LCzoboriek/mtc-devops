@@ -81,3 +81,9 @@ resource "aws_subnet" "ldc_private_subnet" {
   }
 }
 
+resource "aws_route_table_association" "ldc_public_assoc" { 
+  count = length(local.azs)
+  subnet_id = aws_subnet.ldc_public_subnet.*.id[count.index] // All of the pub subnets, put them in a list, and then pull the index out of that list
+  route_table_id = aws_route_table.ldc_public_rt.id
+}
+
