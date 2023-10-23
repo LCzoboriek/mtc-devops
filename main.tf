@@ -45,3 +45,10 @@ resource "aws_default_route_table" "ldc_private_route" {
     Name = "ldc_private_route"
   }
 }
+
+data "aws_availability_zones" "available" {
+  state = "available"
+} // The reason why we have this added, is because availability zones can change depending on the day and time
+// and when we specify the availbility zone in a subnet resource, it could encounter an issue
+// so we need to make sure this is dynamically assigned
+
