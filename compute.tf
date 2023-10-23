@@ -15,7 +15,7 @@ resource "aws_instance" "ldc-main" {
     count = var.main_instance_count
     instance_type = var.main_instance_type // need to specify in terraform cloud hcl
     ami = data.aws_ami.server_ami.id // linking this to the previously created data source above
-    // key_name = ""
+    key_name = aws_key_pair.ldc_auth.id
     vpc_security_group_ids = [aws_security_group.ldc_sg.id] // this has to be compromised of a list, hence why its in brackets, but it is linked to a var
     subnet_id = aws_subnet.ldc_public_subnet[count.index].id 
     root_block_device {
