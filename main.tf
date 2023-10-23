@@ -54,7 +54,7 @@ data "aws_availability_zones" "available" {
 // like for example using data.aws_vailabilty_zones.available.names[0] will use the first zone available
 
 resource "aws_subnet" "ldc_public_subnet" {
-  count = 2
+  count = length(var.public_cidrs) // This will grab the length of what has been defined in the variables file
   vpc_id                            = aws_vpc.ldc_vpc.id
   cidr_block                        = var.public_cidrs[count.index] // Every time it goes through a count, itll loop through that list and apply that to each variable
   map_public_ip_on_launch = true
