@@ -81,9 +81,33 @@ resource "aws_subnet" "ldc_private_subnet" {
   }
 }
 
-resource "aws_route_table_association" "ldc_public_assoc" { 
-  count = length(local.azs)
-  subnet_id = aws_subnet.ldc_public_subnet.*.id[count.index] // All of the pub subnets, put them in a list, and then pull the index out of that list
+resource "aws_route_table_association" "ldc_public_assoc" {
+  count          = length(local.azs)
+  subnet_id      = aws_subnet.ldc_public_subnet.*.id[count.index] // All of the pub subnets, put them in a list, and then pull the index out of that list
   route_table_id = aws_route_table.ldc_public_rt.id
 }
 
+resource "aws_security_group" "ldc_sg" {
+  name        = "public_sg"
+  description = "security group for public instances"
+  vpc_id      = aws_vpc.ldc_vpc.id
+
+}
+
+resource "aws_security_group_rule" "ingress_all" {
+  type              = "ingress"
+  from_port         = 0
+  to_port           = 65535
+  protocol          = "-1"            //That will be udp or tcp and icmp
+  cidr_blocks       = [var.access_ip] // 
+  security_group_id = aws_security_group.ldc_sg.id
+}
+
+resource "aws_security_group_rule" "egress_all" {
+  type              = "egress"
+  from_port         = 0
+  to_port           = 65535
+  protocol          = "-1"          //That will be udp or tcp and icmp
+  cidr_blocks       = ["0.0.0.0/0"] // 
+  security_group_id = aws_security_group.ldc_sg.id
+}
