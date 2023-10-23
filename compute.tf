@@ -25,5 +25,10 @@ resource "aws_instance" "ldc-main" {
     tags = {
         Name = "ldc-main-${random_id.ldc_node_id[count.index].dec}"
     }
-    
+}
+
+resource "aws_key_pair" "ldc_auth" {
+    key_name = var.key_name
+    public_key = var.public_key
+
 }
