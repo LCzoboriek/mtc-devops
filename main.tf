@@ -65,3 +65,15 @@ resource "aws_subnet" "ldc_public_subnet" {
   }
 }
 
+resource "aws_subnet" "ldc_private_subnet" {
+  count = length(var.private_cidrs) // This will grab the length of what has been defined in the variables file
+  vpc_id                            = aws_vpc.ldc_vpc.id
+  cidr_block                        = var.private_cidrs[count.index] // Every time it goes through a count, itll loop through that list and apply that to each variable
+  map_public_ip_on_launch = true
+  availability_zone                 = data.aws_availability_zones.available.names[count.index]
+
+  tags = {
+    Name = "ldc_private-${count.index + 1}"
+  }
+}
+
