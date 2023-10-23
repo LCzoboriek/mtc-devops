@@ -54,13 +54,14 @@ data "aws_availability_zones" "available" {
 // like for example using data.aws_vailabilty_zones.available.names[0] will use the first zone available
 
 resource "aws_subnet" "ldc_public_subnet" {
+  count = 2
   vpc_id                            = aws_vpc.ldc_vpc.id
-  cidr_block                        = var.public_cidrs
+  cidr_block                        = var.public_cidrs[count.index] // Every time it goes through a count, itll loop through that list and apply that to each variable
   map_public_ip_on_launch = true
-  availability_zone                 = data.aws_availability_zones.available.names[0]
+  availability_zone                 = data.aws_availability_zones.available.names[count.index]
 
   tags = {
-    Name = "ldc_public"
+    Name = "ldc_public-${count.index + 1}"
   }
 }
 
