@@ -1,3 +1,7 @@
+locals {
+  azs = data.aws_availability_zones.available.names
+}
+
 resource "random_id" "random" {
   byte_length = 2
 
@@ -54,11 +58,11 @@ data "aws_availability_zones" "available" {
 // like for example using data.aws_vailabilty_zones.available.names[0] will use the first zone available
 
 resource "aws_subnet" "ldc_public_subnet" {
-  count = length(var.public_cidrs) // This will grab the length of what has been defined in the variables file
-  vpc_id                            = aws_vpc.ldc_vpc.id
-  cidr_block                        = var.public_cidrs[count.index] // Every time it goes through a count, itll loop through that list and apply that to each variable
+  count                   = length(var.public_cidrs) // This will grab the length of what has been defined in the variables file
+  vpc_id                  = aws_vpc.ldc_vpc.id
+  cidr_block              = var.public_cidrs[count.index] // Every time it goes through a count, itll loop through that list and apply that to each variable
   map_public_ip_on_launch = true
-  availability_zone                 = data.aws_availability_zones.available.names[count.index]
+  availability_zone       = local.azs[count.index]
 
   tags = {
     Name = "ldc_public-${count.index + 1}"
@@ -66,11 +70,11 @@ resource "aws_subnet" "ldc_public_subnet" {
 }
 
 resource "aws_subnet" "ldc_private_subnet" {
-  count = length(var.private_cidrs) // This will grab the length of what has been defined in the variables file
-  vpc_id                            = aws_vpc.ldc_vpc.id
-  cidr_block                        = var.private_cidrs[count.index] // Every time it goes through a count, itll loop through that list and apply that to each variable
+  count                   = length(var.private_cidrs) // This will grab the length of what has been defined in the variables file
+  vpc_id                  = aws_vpc.ldc_vpc.id
+  cidr_block              = var.private_cidrs[count.index] // Every time it goes through a count, itll loop through that list and apply that to each variable
   map_public_ip_on_launch = true
-  availability_zone                 = data.aws_availability_zones.available.names[count.index]
+  availability_zone       = local.azs[count.index]
 
   tags = {
     Name = "ldc_private-${count.index + 1}"

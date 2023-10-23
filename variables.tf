@@ -1,14 +1,14 @@
 variable "vpc_cidr" {
-  type    = string
-  
+  type = string
+
 }
 
 variable "public_cidrs" {
-  type    = list(string)
-  
+  type = list(string)
+
 }
 
 variable "private_cidrs" {
-  type    = list(string)
-  
+  type = list(string)
+
 }
