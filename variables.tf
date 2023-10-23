@@ -14,3 +14,8 @@ variable "main_instance_type" {
 variable "main_vol_size" {
     type = number
 }
+
+variable "main_instance_count" {
+    type = number
+    default = 1
+}
